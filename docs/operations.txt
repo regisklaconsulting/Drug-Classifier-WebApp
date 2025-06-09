@@ -1,0 +1,21 @@
+===============
+Operations
+===============
+
+Run the app: 
+
+$ export MODEL_FILE_PATH=/tmp/model/drug-classifier-pipeline.skops && python app/drug_app.py 
+...
+[...] - [INFO] - >> Loading the model located at [/tmp/model/drug-classifier-pipeline.skops]
+[...] - [DEBUG] -  Loaded training pipeline: Pipeline(steps=[('preprocessing',
+...
+[...] - [INFO] - Done!
+...
+* Running on local URL:  http://127.0.0.1:7860
+...
+
+See [drug-classifier-gradio-gui.png] for an example of the web app. 
+
+
+
+
