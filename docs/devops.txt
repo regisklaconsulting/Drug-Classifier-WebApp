@@ -22,6 +22,32 @@ See [drug-classifier-gradio-gui.png] for an example of the web app.
 Continuous Intagration (CI) 
 ===========================
 
+Prerequisites: 
+    - Make sure the requirements.txt is up-to-date: [$ uv pip freeze >requirements.txt]
+
+Start with a Python workflow (wf) template: [Repo > Actions]
+    - In "Suggested for this repository" 
+    - Select "Python Application" 
+    - Click "Configure" and adapt the script with your settings: 
+        - triggers 
+        - Python version
+        - ... 
+    => the file .github/worflows/python-app.yml is created 
+    - Pull to update: 
+        $ git pull 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -35,4 +61,3 @@ References
 
 Github Actions For python: 
     - https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python
-    
