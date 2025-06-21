@@ -1,6 +1,9 @@
-===============
+=========
+DevOps
+=========
+
 Operations
-===============
+==========
 
 Run the app: 
 
@@ -16,6 +19,20 @@ $ export MODEL_FILE_PATH=/tmp/model/drug-classifier-pipeline.skops && python app
 
 See [drug-classifier-gradio-gui.png] for an example of the web app. 
 
+Continuous Intagration (CI) 
+===========================
 
 
 
+
+
+
+
+
+
+References
+==========
+
+Github Actions For python: 
+    - https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python
+    
