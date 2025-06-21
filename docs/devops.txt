@@ -36,6 +36,12 @@ Start with a Python workflow (wf) template: [Repo > Actions]
     - Pull to update: 
         $ git pull 
 
+Note: 
+- Push and fix the issues in the Actions tab. 
+
+
+
+
 
 
 
@@ -61,3 +67,5 @@ References
 
 Github Actions For python: 
     - https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python
+    - https://endjin.com/blog/2023/02/how-to-implement-continuous-deployment-of-python-packages-with-github-actions 
+    
