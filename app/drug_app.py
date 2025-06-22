@@ -1,7 +1,8 @@
 # Command to start:
 # (...) $ export MODEL_FILE_PATH=/tmp/model/drug-classifier-pipeline.skops && python app/drug_app.py
 
-import logging 
+import logging
+
 logging.basicConfig(
     level=logging.DEBUG,
     format="[{asctime}] - [{levelname}] - {message}",
@@ -15,12 +16,12 @@ logging.info(" drug_app.py")
 logging.info(" ================== ")
 logging.info("")
 
-# Imports 
-import os 
+# Imports
+import os
 import gradio as gr
 import skops.io as sio
 import warnings
-from sklearn.exceptions import InconsistentVersionWarning # type: ignore
+from sklearn.exceptions import InconsistentVersionWarning  # type: ignore
 
 # Suppress the version warnings
 warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
@@ -46,7 +47,6 @@ logging.debug(f"\tLoaded training pipeline: {training_pipeline}")
 logging.info("Done!")
 
 
-
 def predict_drug(age, sex, blood_pressure, cholesterol, na_to_k_ratio):
     """Predict drugs based on patient features.
 
@@ -65,6 +65,7 @@ def predict_drug(age, sex, blood_pressure, cholesterol, na_to_k_ratio):
 
     label = f"Predicted Drug: {predicted_drug}"
     return label
+
 
 inputs = [
     gr.Slider(15, 74, step=1, label="Age"),
@@ -93,6 +94,5 @@ gr.Interface(
     title=title,
     description=description,
     article=article,
-    theme=gr.themes.Soft(), # type: ignore
+    theme=gr.themes.Soft(),  # type: ignore
 ).launch()
-

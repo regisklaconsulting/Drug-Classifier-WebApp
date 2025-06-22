@@ -3,7 +3,7 @@ install:
 		pip install -r requirements.txt
 
 format:	
-	black *.py 
+	black -v app 
 		
 update-branch:
 	git config --global user.name $(USER_NAME)
