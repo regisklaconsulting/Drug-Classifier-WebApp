@@ -65,4 +65,5 @@ jobs:
         NAME: ${{ secrets.USER_NAME }}
         EMAIL: ${{ secrets.USER_EMAIL }}
         TARGET_BRANCH: to-be-deployed
-      run: make update-branch USER_NAME=$NAME USER_EMAIL=$EMAIL TARGET_BRANCH=$TARGET_BRANCH
+        SOURCE_BRANCH: main
+      run: make update-branch USER_NAME=$NAME USER_EMAIL=$EMAIL SOURCE_BRANCH=$SOURCE_BRANCH TARGET_BRANCH=$TARGET_BRANCH
