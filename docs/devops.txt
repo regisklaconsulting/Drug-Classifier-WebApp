@@ -2,8 +2,9 @@
 DevOps
 =========
 
+===============
 Operations
-==========
+===============
 
 Run the app: 
 
@@ -19,13 +20,51 @@ $ export MODEL_FILE_PATH=/tmp/model/drug-classifier-pipeline.skops && python app
 
 See [drug-classifier-gradio-gui.png] for an example of the web app. 
 
-Continuous Intagration (CI) 
-===========================
+===============
+CI/CD
+===============
 
-Prerequisites: 
-    - Make sure the requirements.txt is up-to-date: [$ uv pip freeze >requirements.txt]
+Step 0: Prerequisites
+===================== 
 
-Start with a Python workflow (wf) template: [Repo > Actions]
+>>> Locally
+
+Make sure the requirements.txt is up-to-date: 
+    $ uv pip freeze >requirements.txt
+
+>>> Hugging Face
+
+Hugging Face Token: Profile > Settings > Access Tokens  
+    + Create New Token 
+        type = Write 
+        name = GITHUB_ACTIONS_WRT_TOKEN
+
+>>> On Github
+
+Create the following secrets: Settings tab > Secrets and variables > Actions > New Repositories Secret 
+    - USER_NAME = regisklaconsulting
+    - USER_EMAIL = regisklaconsulting@gmail.com 
+
+    Note: they are used in the Makefile script we'll create later. 
+
+Create a branch "to-be-deployed" 
+    - We create this branch in order for it to always contain the last built version to be deployed 
+    - Github Actions workflow: 
+        (a) build the project 
+        (b) if build ok then 
+                commit all generated files (e.g. test reports, metrics, etc)
+                push on "to-be-deployed" 
+            fi 
+         
+
+CI 
+==
+
+Step 1: Create a Makefile script (see file) 
+    - permissions to write 
+    - 
+
+Step 2: Start with a Python workflow (wf) template: [Repo > Actions]
     - In "Suggested for this repository" 
     - Select "Python Application" 
     - Click "Configure" and adapt the script with your settings: 
@@ -37,7 +76,16 @@ Start with a Python workflow (wf) template: [Repo > Actions]
         $ git pull 
 
 Note: 
-- Push and fix the issues in the Actions tab. 
+- Push and fix the issues in the Actions tab until the build (in Actions tab) becomes green.
+
+Continuous Deployment (CD) 
+==========================
+
+We'll use the same Github Actions config file to write the CD process. 
+The deployment is made on Hugging Face Spaces [See Simple-CI-CD-For-ML/docs/hf-faces.txt].
+
+
+
 
 
 
@@ -68,4 +116,4 @@ References
 Github Actions For python: 
     - https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python
     - https://endjin.com/blog/2023/02/how-to-implement-continuous-deployment-of-python-packages-with-github-actions 
-    
+

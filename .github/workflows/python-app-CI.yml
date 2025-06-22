@@ -1,21 +1,26 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: Python application
+name: Drug-Classifier Web App CI Pipeline
 
 on:
   # EVENT 2 
   push:
     branches: [ "main" ]
-
   # EVENT 2b 
   pull_request:
     branches: [ "main" ]
+  # ? 
+  workflow_dispatch:
 
-permissions:
-  contents: read
+# permissions:
+#  contents: read
+permissions: write-all
 
 jobs:
+
+  # This is the build or CI part
+
   build:
 
     runs-on: ubuntu-latest
@@ -37,6 +42,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Format
+      run: make format
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -53,4 +60,9 @@ jobs:
         path: junit/test-results-${{ matrix.python-version }}.xml
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
-
+    - name: Update Branch
+      env:
+        NAME: ${{ secrets.USER_NAME }}
+        EMAIL: ${{ secrets.USER_EMAIL }}
+        TARGET_BRANCH: to-be-deployed
+      run: make update-branch USER_NAME=$NAME USER_EMAIL=$EMAIL TARGET_BRANCH=$TARGET_BRANCH
