@@ -24,8 +24,8 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_REPO_ID: regisklaconsulting/Drug-Classifier-Web-App
           TARGET_BRANCH: to-be-deployed
-          LOCAL_PATH: ./app
-        run: make deploy TARGET_BRANCH=$TARGET_BRANCH HF_TOKEN=$HF_TOKEN HF_REPO_ID=$HF_REPO_ID LOCAL_PATH=$LOCAL_PATH 
+          LOCAL_PATHS: requirements.txt ./app
+        run: make deploy TARGET_BRANCH=$TARGET_BRANCH HF_TOKEN=$HF_TOKEN HF_REPO_ID=$HF_REPO_ID LOCAL_PATHS=$LOCAL_PATHS 
 
 
 
