@@ -21,7 +21,7 @@ jobs:
 
         # Update the following values regarding your environment
         env:
-          HF_TOKEN: ${{ secrets.GITHUB_ACTIONS_WRT_TOKEN }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_REPO_ID: regisklaconsulting/Drug-Classifier-Web-App
           TARGET_BRANCH: to-be-deployed
           LOCAL_PATH: ./app

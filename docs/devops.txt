@@ -49,6 +49,7 @@ Hugging Face Token: Profile > Settings > Access Tokens
 Create the following secrets: Settings tab > Secrets and variables > Actions > New Repositories Secret 
     - USER_NAME = regisklaconsulting
     - USER_EMAIL = regisklaconsulting@gmail.com 
+    - HF_TOKEN = value of GITHUB_ACTIONS_WRT_TOKEN 
 
     Note: they are used in the Makefile script we'll create later. 
 
