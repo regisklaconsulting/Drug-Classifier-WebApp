@@ -11,17 +11,15 @@ update-branch:
 	git commit -am "Update with new results" || true
 	git push --force origin $(SOURCE_BRANCH):$(TARGET_BRANCH)
 	
-hf-login: 
+hf-pull-login: 
 	pip install -U "huggingface_hub[cli]"
 	git pull origin $(TARGET_BRANCH)
 	git switch $(TARGET_BRANCH)
-	huggingface-cli login --token $(HF) --add-to-git-credential
+	huggingface-cli login --token $(HF_TOKEN) --add-to-git-credential
 
-push-hub: 
-	huggingface-cli upload kingabzpro/Drug-Classification ./App --repo-type=space --commit-message="Sync App files"
-	huggingface-cli upload kingabzpro/Drug-Classification ./Model /Model --repo-type=space --commit-message="Sync Model"
-	huggingface-cli upload kingabzpro/Drug-Classification ./Results /Metrics --repo-type=space --commit-message="Sync Model"
+hf-push: 
+	huggingface-cli upload $(HF_REPO_ID) $(LOCAL_PATH) --repo-type=space --commit-message="Sync web app files"
 
-deploy: hf-login push-hub
+deploy: hf-pull-login hf-push
 
-all: install format train eval update-branch deploy
+all: install format update-branch deploy

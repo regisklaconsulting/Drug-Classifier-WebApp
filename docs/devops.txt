@@ -29,8 +29,13 @@ Step 0: Prerequisites
 
 >>> Locally
 
-Make sure the requirements.txt is up-to-date: 
+- Make sure the requirements.txt is up-to-date: 
     $ uv pip freeze >requirements.txt
+
+- Be sure about the alignment of: app/README.md file [see SIMPLE-CI-CD-FOR-ML] project. 
+    ...
+    app_file: drug_app.py
+    ...
 
 >>> Hugging Face
 
@@ -55,11 +60,14 @@ Create a branch "to-be-deployed"
                 commit all generated files (e.g. test reports, metrics, etc)
                 push on "to-be-deployed" 
             fi 
-         
 
+Step 1: CI 
+==========
 
-CI 
-==
+Expected outcome: 
+    - Application is compile and/or built 
+    - Unit and integration tests are successfully run 
+    - 
 
 Step 1: Create a Makefile script (see file) 
     - permissions to write 
@@ -79,40 +87,44 @@ Step 2: Start with a Python workflow (wf) template: [Repo > Actions]
 Note: 
 - Push and fix the issues in the Actions tab until the build (in Actions tab) becomes green.
 
-Continuous Deployment (CD) 
-==========================
+Step 2: Continuous Deployment (CD) 
+==================================
 
 We'll use the same Github Actions config file to write the CD process. 
 The deployment is made on Hugging Face Spaces [See Simple-CI-CD-For-ML/docs/hf-faces.txt].
 
+The deployment process roughly consists to:
 
+    1. pull the app from the "to-be-deployed" branch 
+        => Makefile: hf-pull-login
+    2. singning in HF CLI using a token
+        => Makefile: hf-pull-login
+    3. push the app files to finally deploy the app 
+            => Makefile: hf-push
 
+See the file [.github/workflows/python-app-CD.yml] and [Makefile] for the CD wf: 
 
+In Makefile: 
 
+    hf-pull-login: 
+        - N/A 
+    hf-push: 
+        
+        Note: The HF CLI is used to "push" the files in the right directories
+            - REPO_ID = regisklaconsulting/Drug-Classifier-Web-App
+            - LOCAL_PATH = ./app 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Triggering events: 
+    - each time the CI workflow completes.  
 
 
 
 
 References
 ==========
+
+HF CLI:
+    - https://huggingface.co/docs/huggingface_hub/guides/cli
 
 Github Actions For python: 
     - https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python

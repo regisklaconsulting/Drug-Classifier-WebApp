@@ -19,8 +19,6 @@ permissions: write-all
 
 jobs:
 
-  # This is the build or CI part
-
   build:
 
     runs-on: ubuntu-latest
