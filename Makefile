@@ -18,9 +18,9 @@ hf-pull-login:
 	huggingface-cli login --token $(HF_TOKEN) --add-to-git-credential
 
 hf-push: 
-	huggingface-cli upload $(HF_REPO_ID) $(LOCAL_PATH) $(REQUIREMENTS_FILE) --repo-type=space --commit-message="Sync web app files"
+	huggingface-cli upload $(HF_REPO_ID) $(LOCAL_PATH_1) --repo-type=space --commit-message="Sync web app files - requirements.txt"
+	huggingface-cli upload $(HF_REPO_ID) $(LOCAL_PATH_2) --repo-type=space --commit-message="Sync web app files - others"
 	
-
 deploy: hf-pull-login hf-push
 
 all: install format update-branch deploy
