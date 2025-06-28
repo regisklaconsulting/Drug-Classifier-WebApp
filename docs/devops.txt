@@ -106,6 +106,12 @@ space   https://huggingface.co/spaces/regisklaconsulting/Drug-Classifier-Web-App
 
 2. Force push to sync everything for the first time
 
+$ git add .
+$ git commit -m "Initial commit"
+
+$ git push --force space main
+
+
 
 
 
