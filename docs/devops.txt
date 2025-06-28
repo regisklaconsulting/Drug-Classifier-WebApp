@@ -91,8 +91,32 @@ Note:
 Step 2: Continuous Deployment (CD) 
 ==================================
 
-We'll use the same Github Actions config file to write the CD process. 
-The deployment is made on Hugging Face Spaces [See Simple-CI-CD-For-ML/docs/hf-faces.txt].
+The deployment is made on Hugging Face Spaces [See docs/hf-spaces.txt].
+The main id here is to keep sync, both Gihub and HF Spaces repositories.
+
+1. First, add your Spaces app as an additional remote to your existing Git repository by running the following command in your terminal:
+
+$ git remote add space https://huggingface.co/spaces/regisklaconsulting/Drug-Classifier-Web-App
+
+$ git remote -v
+origin  https://github.com/regisklaconsulting/Drug-Classifier-WebApp.git (fetch)
+origin  https://github.com/regisklaconsulting/Drug-Classifier-WebApp.git (push)
+space   https://huggingface.co/spaces/regisklaconsulting/Drug-Classifier-Web-App (fetch)    <<< space
+space   https://huggingface.co/spaces/regisklaconsulting/Drug-Classifier-Web-App (push)     <<< space
+
+2. Force push to sync everything for the first time
+
+
+
+
+
+
+
+
+
+
+
+
 
 The deployment process roughly consists to:
 
@@ -131,3 +155,5 @@ Github Actions For python:
     - https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python
     - https://endjin.com/blog/2023/02/how-to-implement-continuous-deployment-of-python-packages-with-github-actions 
 
+Github Actions & HF Spaces
+    - https://github.com/ruslanmv/How-to-Sync-Hugging-Face-Spaces-with-a-GitHub-Repository (***)
