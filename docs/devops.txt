@@ -106,10 +106,22 @@ space   https://huggingface.co/spaces/regisklaconsulting/Drug-Classifier-Web-App
 
 2. Force push to sync everything for the first time
 
+WARNING: 
+Update your local README.md file with the yaml header of the README.md file automatically created in the Space. 
+
 $ git add .
 $ git commit -m "Initial commit"
 
-$ git push --force space main
+Below we push the main branch "main" in the "space" remote repository:
+
+$ git push --force space main:main
+    
+    WARNING:
+    - in main:main, 1st "main" the local or source branch, 2nd "main" the target or branch in space remote repo 
+    - Go to your space in you can see the sync is hapenning 
+        - If HF Space, wlick on the "Files" to see what files are in synch with your repo 
+          
+
 
 
 
