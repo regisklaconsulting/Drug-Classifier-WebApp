@@ -1,0 +1,236 @@
+=========
+DevOps
+=========
+
+===============
+Operations
+===============
+
+>>> Run the app locally in the terminal: 
+
+$ mkdir -p /tmp/models && cp ../Drug-Classifier/model/drug-classifier-pipeline.skops /tmp/models
+$ export MODEL_FILE_PATH=/tmp/models/drug-classifier-pipeline.skops && python app/drug_app.py 
+...
+[...] - [INFO] - >> Loading the model located at [/tmp/model/drug-classifier-pipeline.skops]
+[...] - [DEBUG] -  Loaded training pipeline: Pipeline(steps=[('preprocessing',
+...
+[...] - [INFO] - Done!
+...
+* Running on local URL:  http://127.0.0.1:7860/
+...
+
+>>> Docker containerization: 
+
+Before all, we need to containerize the web app any time we ear abot depeloyment. Thus let us add a Dockerfile and test if 
+every thing goes fine locally.
+
+Build Docker image and tag it: 
+
+(...)$ docker build -t drug-classifier-webapp-img:1.0.0 .
+(...)$ docker tag drug-classifier-webapp-img:1.0.0 drug-classifier-webapp-img:latest 
+
+>>> Run the app as a container: 
+
+(from the project top directory)
+
+- Run: 
+
+$ mkdir -p /tmp/models && cp ../Drug-Classifier/model/drug-classifier-pipeline.skops /tmp/models 
+$ docker run --rm -t \
+    -v /tmp/models:/models \
+    -e MODEL_FILE_PATH=/models/drug-classifier-pipeline.skops \
+    --name drug-classifier-webapp  \
+    drug-classifier-webapp-img:latest
+ 
+Get IP address of the container:
+
+$ docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' drug-classifier-webapp
+172.17.0.2
+
+Then browse: http://172.17.0.2:7860/
+
+See [drug-classifier-gradio-gui.png] for an example of the web app. 
+
+                                ===============
+                                    CI/CD
+                                ===============
+
+Step 0: Prerequisites
+===================== 
+
+>>> Locally
+
+- Make sure the requirements.txt is up-to-date: 
+    $ uv pip freeze >requirements.txt
+
+>>> Hugging Face
+
+Hugging Face Token: Profile > Settings > Access Tokens  
+    + Create New Token 
+        type = Write 
+        name = GITHUB_ACTIONS_WRT_TOKEN
+
+>>> On Github
+
+Create the following secrets: Settings tab > Secrets and variables > Actions > New Repositories Secret 
+    - USER_NAME = regisklaconsulting
+    - USER_EMAIL = regisklaconsulting@gmail.com 
+    - HF_TOKEN = value of GITHUB_ACTIONS_WRT_TOKEN 
+
+    Note: they are used in the Makefile script we'll create later. 
+
+Create a branch "to-be-deployed" 
+    - We create this branch in order for it to always contain the last built version to be deployed 
+    - Github Actions workflow: 
+        (a) build the project 
+        (b) if build ok then 
+                commit all generated files (e.g. test reports, metrics, etc)
+                push on "to-be-deployed" 
+            fi 
+
+Continuous integration (CI) 
+===========================
+
+Expected outcome: 
+    - Application is compile and/or built 
+    - Unit and integration tests are successfully run 
+    - 
+
+Step 1: Create a Makefile script (see file) 
+    - permissions to write 
+    - 
+
+Step 2: Start with a Python workflow (wf) template: [Repo > Actions]
+    - In "Suggested for this repository" 
+    - Select "Python Application" 
+    - Click "Configure" and adapt the script with your settings: 
+        - triggers 
+        - Python version
+        - ... 
+    => the file .github/worflows/python-app.yml is created 
+    - Pull to update: 
+        $ git pull 
+
+Note: 
+- Push and fix the issues in the Actions tab until the build (in Actions tab) becomes green.
+
+Continuous Deployment (CD) 
+==========================
+
+>>> Step 1: Create the HF space 
+
+Go to the documentation [https://huggingface.co/docs/hub/spaces-sdks-docker-first-demo] and execute the steps. 
+
+Go to here [https://huggingface.co/new-space] and create a new Space:
+
+- User name = regisklaconsulting
+- Space Name = Drug-Classifier-Web-App 
+- Space ID =  regisklaconsulting/Drug-Classifier-Web-App
+- Short desk = The Drug Classifier Web App hosting space 
+- SDK = docker
+- Hardware = CPU ... Free
+- ... 
+
+The space is created at [https://huggingface.co/spaces/regisklaconsulting/Drug-Classifier-Web-App]
+
+>>> Step 2: Get required content from the space
+
+Click on the Files > README.md and copy its content at the begining of the local README.md file. 
+
+Adapt the YAML config part of the README.md:
+
+---
+... 
+app_port: 7860
+...
+---
+
+Step 3: Add your Spaces app as an additional remote to your existing Git repository by running the following command in your terminal:
+
+$ git remote add space https://huggingface.co/spaces/regisklaconsulting/Drug-Classifier-Web-App
+
+$ git remote -v
+origin  https://github.com/regisklaconsulting/Drug-Classifier-WebApp.git (fetch)
+origin  https://github.com/regisklaconsulting/Drug-Classifier-WebApp.git (push)
+space   https://huggingface.co/spaces/regisklaconsulting/Drug-Classifier-Web-App (fetch)    <<< space
+space   https://huggingface.co/spaces/regisklaconsulting/Drug-Classifier-Web-App (push)     <<< space
+
+2. Force push to sync everything for the first time
+
+WARNING: 
+Update your local README.md file with the yaml header of the README.md file automatically created in the Space. 
+
+$ git add .
+$ git commit -m "commit for HF space deply"
+
+Below we push the main branch "main" in the "space" remote repository:
+
+$ git push --force space main:main
+    
+    WARNING:
+    - in main:main, 1st "main" the local or source branch, 2nd "main" the target or branch in space remote repo 
+    - Go to your space in you can see the sync is hapenning 
+        - If HF Space, wlick on the "Files" to see what files are in synch with your repo 
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The deployment process roughly consists to:
+
+    1. pull the app from the "to-be-deployed" branch 
+        => Makefile: hf-pull-login
+    2. singning in HF CLI using a token
+        => Makefile: hf-pull-login
+    3. push the app files to finally deploy the app 
+            => Makefile: hf-push
+
+See the file [.github/workflows/python-app-CD.yml] and [Makefile] for the CD wf: 
+
+In Makefile: 
+
+    hf-pull-login: 
+        - N/A 
+    hf-push: 
+        
+        Note: The HF CLI is used to "push" the files in the right directories
+            - REPO_ID = regisklaconsulting/Drug-Classifier-Web-App
+            - LOCAL_PATH = ./app 
+
+Triggering events: 
+    - each time the CI workflow completes.  
+
+
+
+
+References
+==========
+
+HF Spaces Docker SDK:
+    - https://huggingface.co/docs/hub/spaces-sdks-docker
+    - https://huggingface.co/docs/hub/spaces-sdks-docker-first-demo 
+    
+
+
+
+
+HF CLI:
+    - https://huggingface.co/docs/huggingface_hub/guides/cli
+
+Github Actions For python: 
+    - https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python
+    - https://endjin.com/blog/2023/02/how-to-implement-continuous-deployment-of-python-packages-with-github-actions 
+
+Github Actions & HF Spaces
+    - https://github.com/ruslanmv/How-to-Sync-Hugging-Face-Spaces-with-a-GitHub-Repository (***)

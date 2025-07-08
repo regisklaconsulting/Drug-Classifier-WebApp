@@ -1,0 +1,22 @@
+=====================
+Setup.txt
+=====================
+
+Create the project structure: 
+
+(in the target top folder)
+
+$ uv init Drug-Classifier-WebApp
+$ cd Drug-Classifier-WebApp
+$ uv venv 
+$ source .venv/bin/activate
+
+Add main depencies: 
+
+(...) $ uv add gradio skops 
+
+Update requirements.txt: 
+
+(...) $ uv pip freeze > requirements.txt
+
+

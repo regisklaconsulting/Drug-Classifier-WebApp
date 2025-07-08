@@ -1,0 +1,39 @@
+====================
+Web App Design 
+====================
+
+1. Introduction
+===============
+
+Here we describe the main design decisions regarding a small web app to expose the drug classifier model. 
+
+2. Functional Design
+====================
+
+The web app has the following features: 
+
+- a loading function for the scikit-learn pipeline and the model. 
+- a function to predict drug labels based on user input. 
+- an input UI using Gradio sliders for float values and Gradio radio for categorical values.
+
+We will provide all of these variables and the prediction function to the Gradio Interface function and launch it.
+To make our web app look modern, we will use a default soft theme.
+
+3. Technical Design
+===================
+
+The full stack dev will directly craft the app/drug_app.py script. 
+
+def predict_drug(age, sex, blood_pressure, cholesterol, na_to_k_ratio):
+- TODO 
+
+
+
+
+
+
+
+Confer to the script code for the details.
+
+END OF DOCUMENT. 
+
