@@ -40,7 +40,7 @@ trusted_types = [
 ]
 
 # The path of the model is available as an environment variable
-MODEL_FILE_PATH = os.getenv("MODEL_FILE_PATH")
+MODEL_FILE_PATH = os.getenv("MODEL_FILE_PATH", default="./models/drug-classifier-pipeline.skops")
 logging.info(f">> Loading the model located at [{MODEL_FILE_PATH}]")
 training_pipeline = sio.load(str(MODEL_FILE_PATH), trusted=trusted_types)
 logging.debug(f"\tLoaded training pipeline: {training_pipeline}")

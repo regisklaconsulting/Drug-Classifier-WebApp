@@ -8,6 +8,7 @@ FROM python:3.13.3-slim
 WORKDIR /app
 COPY requirements.txt /app
 COPY app/drug_app.py /app
+COPY models/drug-classifier-pipeline.skops /app/models
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt

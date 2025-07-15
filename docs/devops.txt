@@ -145,7 +145,7 @@ app_port: 7860
 ...
 ---
 
-Step 3: Add your Spaces app as an additional remote to your existing Git repository by running the following command in your terminal:
+>>> Step 3: Add your Spaces app as an additional remote to your existing Git repository by running the following command in your terminal:
 
 $ git remote add space https://huggingface.co/spaces/regisklaconsulting/Drug-Classifier-Web-App
 
@@ -174,9 +174,40 @@ $ git push --force space master:main
           
 Go to the space and see the Docker image being built and starting the application: 
 
+    ... [INFO] - >> Loading the model located at [None]
+    Traceback (most recent call last):
+    File "/app/drug_app.py", line 45, in <module>
+        training_pipeline = sio.load(str(MODEL_FILE_PATH), trusted=trusted_types)
+    File "/usr/local/lib/python3.13/site-packages/skops/io/_persist.py", line 147, in load
+        with ZipFile(file, "r") as input_zip:
+            ~~~~~~~^^^^^^^^^^^
+    File "/usr/local/lib/python3.13/zipfile/__init__.py", line 1367, in __init__
+        self.fp = io.open(file, filemode)
+                ~~~~~~~^^^^^^^^^^^^^^^^
+    FileNotFoundError: [Errno 2] No such file or directory: 'None'
+
 WARNING:
 The deployment is not complete because the web app is looking for the model pipeline via the env. variable MODEL_FILE_PATH. 
 
+>>> Step 4: Push the prediction pipeline to HF Space 
+
+We will manually execute the Makefile using env variables set on the command line: 
+
+Copy the model somewhere: 
+
+$ mkdir -p /tmp/models && cp ../Drug-Classifier/model/drug-classifier-pipeline.skops /tmp/models
+
+Push the model in HF space: 
+
+$ export HF_TOKEN="xxxxxxxxxxxxxxxxx" 
+$ export HF_REPO_ID="regisklaconsulting/Drug-Classifier-Web-App" \
+    export MODEL_LOCAL_PATH="/tmp/models/drug-classifier-pipeline.skops" \
+    export MODEL_REMOTE_PATH="/models/drug-classifier-pipeline.skops"
+$ make deploy HF_TOKEN=$HF_TOKEN HF_REPO_ID=$HF_REPO_ID MODEL_LOCAL_PATH=$MODEL_LOCAL_PATH MODEL_REMOTE_PATH=$MODEL_REMOTE_PATH 
+
+Go to your HF space, and check the "Files" tab to see if the models/ directory is created and populated. 
+
+Now update the Dockerfile with the following line, and push it: 
 
 
 
@@ -188,35 +219,6 @@ The deployment is not complete because the web app is looking for the model pipe
 
 
 
-
-
-
-
-
-
-The deployment process roughly consists to:
-
-    1. pull the app from the "to-be-deployed" branch 
-        => Makefile: hf-pull-login
-    2. singning in HF CLI using a token
-        => Makefile: hf-pull-login
-    3. push the app files to finally deploy the app 
-            => Makefile: hf-push
-
-See the file [.github/workflows/python-app-CD.yml] and [Makefile] for the CD wf: 
-
-In Makefile: 
-
-    hf-pull-login: 
-        - N/A 
-    hf-push: 
-        
-        Note: The HF CLI is used to "push" the files in the right directories
-            - REPO_ID = regisklaconsulting/Drug-Classifier-Web-App
-            - LOCAL_PATH = ./app 
-
-Triggering events: 
-    - each time the CI workflow completes.  
 
 
 
@@ -224,14 +226,14 @@ Triggering events:
 References
 ==========
 
+CI/CD for ML with HF: 
+    - 
+
+
 HF Spaces Docker SDK:
     - https://huggingface.co/docs/hub/spaces-sdks-docker
     - https://huggingface.co/docs/hub/spaces-sdks-docker-first-demo 
     
-
-
-
-
 HF CLI:
     - https://huggingface.co/docs/huggingface_hub/guides/cli
 
@@ -241,3 +243,4 @@ Github Actions For python:
 
 Github Actions & HF Spaces
     - https://github.com/ruslanmv/How-to-Sync-Hugging-Face-Spaces-with-a-GitHub-Repository (***)
+

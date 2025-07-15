@@ -22,7 +22,32 @@ To make our web app look modern, we will use a default soft theme.
 3. Technical Design
 ===================
 
+    3.1. app/drug_app.py 
+    ====================
+
 The full stack dev will directly craft the app/drug_app.py script. 
+
+>>> Loading the model pipeline file: 
+
+We use for this the env. variable named MODEL_FILE_PATH. It should contain the absolute path of the model pipeline. 
+Thus, to run the porgram locally, one set this variable with the right location... (see devops.txt)
+
+However, in the code we setup a default value "./models/drug-classifier-pipeline.skops". 
+Then, the application can default to this value if the MODEL_FILE_PATH is not set!
+
+    ...
+    MODEL_FILE_PATH = os.getenv("MODEL_FILE_PATH", default="./models/drug-classifier-pipeline.skops")
+    ...
+
+WARNING: 
+Notice the relative path "./models" for the default value. It will facilitate the deployment of the prediction pipeline. 
+Indeed, see Step 4 of Section CD in devops.txt. 
+
+
+
+
+
+
 
 def predict_drug(age, sex, blood_pressure, cholesterol, na_to_k_ratio):
 - TODO 
