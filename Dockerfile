@@ -4,11 +4,14 @@
 FROM python:3.13.3-slim
 
 
-# Set the working directory and copy files in it
+# Set app/ as working directory and Copy files in it 
+
 WORKDIR /app
+
 COPY requirements.txt /app
 COPY app/drug_app.py /app
-COPY models/drug-classifier-pipeline.skops /app/models
+COPY models/. /app/models/
+
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt

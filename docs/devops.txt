@@ -41,7 +41,7 @@ $ docker run --rm -t \
     -e MODEL_FILE_PATH=/models/drug-classifier-pipeline.skops \
     --name drug-classifier-webapp  \
     drug-classifier-webapp-img:latest
- 
+
 Get IP address of the container:
 
 $ docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' drug-classifier-webapp
@@ -50,6 +50,17 @@ $ docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' dr
 Then browse: http://172.17.0.2:7860/
 
 See [drug-classifier-gradio-gui.png] for an example of the web app. 
+
+- To connect to the container: 
+
+$ docker run --rm -it drug-classifier-webapp-img:latest /bin/bash
+root@ed3092b01a68:/app# 
+# ls -l 
+total 8
+-rw-rw-r-- 1 root root 3122 xxxx drug_app.py
+-rw-rw-r-- 1 root root    0 xxxx models
+-rw-rw-r-- 1 root root 1156 xxxx requirements.txt
+
 
                                 ===============
                                     CI/CD
@@ -208,6 +219,31 @@ $ make deploy HF_TOKEN=$HF_TOKEN HF_REPO_ID=$HF_REPO_ID MODEL_LOCAL_PATH=$MODEL_
 Go to your HF space, and check the "Files" tab to see if the models/ directory is created and populated. 
 
 Now update the Dockerfile with the following line, and push it: 
+
+...
+WORKDIR /app
+...
+COPY models/. /app/models/
+...
+
+Build the image locally and test it (without mounting any directory, nor specifying the MODEL_FILE_PATH env var): 
+
+$ docker build -t drug-classifier-webapp-img:1.0.0 . 
+$ docker tag drug-classifier-webapp-img:1.0.0 drug-classifier-webapp-img:latest
+$ docker run --rm -t \
+    --name drug-classifier-webapp  \
+    drug-classifier-webapp-img:latest
+
+The app should fail but with a message specifying that the prediction pipeline is not "good": 
+
+... [INFO] - >> Loading the model located at [./models/drug-classifier-pipeline.skops]
+Traceback (most recent call last):
+  File "/app/drug_app.py", line 45, in <module>
+...
+raise BadZipFile("File is not a zip file")
+zipfile.BadZipFile: File is not a zip file
+
+Now commit and push the code to the space: 
 
 
 
